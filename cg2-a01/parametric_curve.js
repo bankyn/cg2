@@ -13,24 +13,28 @@ define(["util", "vec2", "scene", "point_dragger", "straight_line"],
 		this.segments = segments || 20;
 		this.tickmarks = tickmarks || false;
 		this.lines = new Array(this.segments);
-		createSegments();
+		createSegments(this);
 	};
 	
 	// creates straight line objects as segments for this parametric curve
-	var createSegments = function() {
-		var points = new Array(this.segments+1);
-		for(var _index=0; _index < this.segments+1; _index++) {
-			var t = this.mint + _index/this.segments * (this.maxt-this.mint);
-			points[_index] = [eval(xt),eval(yt)];
+	var createSegments = function(curCurve) {
+		var points = new Array(curCurve.segments+1);
+		for(var _index=0; _index < curCurve.segments+1; _index++) {
+			var t = curCurve.mint + _index/curCurve.segments * (curCurve.maxt-curCurve.mint);
+			points[_index] = [eval(curCurve.xt),eval(curCurve.yt)];
 		}
-		for(var _index=1; _index < this.segments+1; _index++) {
-			this.lines[_index-1] = new StraightLine(points[_index-1],points[_index],this.lineStyle);
+		for(var _index=1; _index < curCurve.segments+1; _index++) {
+			curCurve.lines[_index-1] = new StraightLine(points[_index-1],points[_index],curCurve.lineStyle);
 		}
 	};
 	
-	ParametricCurve.prototype.isHit() {
+	ParametricCurve.prototype.createDraggers = function() {
+		return [];
+	};
+	
+	ParametricCurve.prototype.isHit = function(context,pos) {
 		for(var _index=0; _index < this.segments; _index++) {
-			if(this.lines[_index].isHit) return true;
+			if(this.lines[_index].isHit(context,pos)) return true;
 		}
 		return false;
 	};

@@ -10,8 +10,8 @@
  */
  
 /* requireJS module definition */
-define(["jquery", "straight_line", "circle"], 
-       (function($, StraightLine, Circle) {
+define(["jquery", "straight_line", "circle", "parametric_curve"], 
+       (function($, StraightLine, Circle, ParametricCurve) {
 
     "use strict"; 
                 
@@ -82,6 +82,36 @@ define(["jquery", "straight_line", "circle"],
 			sceneController.changeCallback();
 		}));
 		
+		$("#btnNewCurve").click((function() {
+			var _xt = $("#inputXt").val();
+			var _yt = $("#inputYt").val();
+			if(evalExpr(_xt)) {
+				if(evalExpr(_yt)) {
+					var style = { 
+					width: Math.floor(Math.random()*3)+1,
+					color: randomColor()
+					};
+					var curve = new ParametricCurve(style,_xt,_yt,
+					$("#inputMint").val(), $("#inputMaxt").val(), $("#inputSegments").val(),
+					$("#inputTickmarks").checked=="checked");
+					scene.addObjects([curve]);
+					sceneController.deselect();
+					sceneController.select(curve);
+				} else failExpr(_yt);
+			} else failExpr(_xt);
+		}));
+		
+		/* function to evaluate entering of x(t) and y(t) functions */
+		var evalExpr = function(expr) {
+			if(expr == undefined || expr == "") return true;
+			var _pattern = /^(\D*|t)|((Math\.sin|Math\.cos)\((\D*|t)|((\D*|t)(\+|\-|\*|\/)(\D*|t)(\+|\-|\*|\/)?)*\))*$/;
+			console.log(_pattern.test(expr));
+			return _pattern.test(expr);
+		};
+		/* function for output formula errors */
+		var failExpr = function(expr) {
+			alert("Function not provided:\n"+expr);
+		};
 		/*
 		 * defines function for object changes
 		 */
@@ -139,7 +169,10 @@ define(["jquery", "straight_line", "circle"],
 	$("#inputMaxt").val("");
 	$("#inputSegments").val("");
 	$("#formRadius").hide();
+	/* in case of need
 	$("#formParametricCurve").hide();
+	*/
+	
     // return the constructor function 
     return HtmlController;
 
