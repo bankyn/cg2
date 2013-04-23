@@ -13,8 +13,19 @@ define(["util", "vec2", "scene", "point_dragger", "straight_line"],
 		this.segments = segments || 20;
 		this.tickmarks = tickmarks || false;
 		this.lines = new Array(this.segments);
-		//straight line objekte ins array speichern,
-		//hier wird das konstrukt zum zeichnen erstellt
+		createSegments();
+	};
+	
+	// creates straight line objects as segments for this parametric curve
+	var createSegments = function() {
+		var points = new Array(this.segments+1);
+		for(var _index=0; _index < this.segments+1; _index++) {
+			var t = this.mint + _index/this.segments * (this.maxt-this.mint);
+			points[_index] = [eval(xt),eval(yt)];
+		}
+		for(var _index=1; _index < this.segments+1; _index++) {
+			this.lines[_index-1] = new StraightLine(points[_index-1],points[_index],this.lineStyle);
+		}
 	};
 	
 	ParametricCurve.prototype.isHit() {
