@@ -86,7 +86,9 @@ define(["jquery", "straight_line", "circle", "parametric_curve"],
 			var _xt = $("#inputXt").val();
 			var _yt = $("#inputYt").val();
 			if(evalExpr(_xt)) {
+				console.log(_xt);
 				if(evalExpr(_yt)) {
+					console.log(_yt);
 					var style = { 
 					width: Math.floor(Math.random()*3)+1,
 					color: randomColor()
@@ -103,10 +105,14 @@ define(["jquery", "straight_line", "circle", "parametric_curve"],
 		
 		/* function to evaluate entering of x(t) and y(t) functions */
 		var evalExpr = function(expr) {
-			if(expr == undefined || expr == "") return true;
-			var _pattern = /^(\D*|t)|((Math\.sin|Math\.cos)\((\D*|t)|((\D*|t)(\+|\-|\*|\/)(\D*|t)(\+|\-|\*|\/)?)*\))*$/;
-			console.log(_pattern.test(expr));
-			return _pattern.test(expr);
+			if(expr == undefined) {
+				return true;
+			}
+			var _pattern = /.*/;
+			if(expr.search(_pattern)== -1) {
+				return false;
+			}
+			return true;
 		};
 		/* function for output formula errors */
 		var failExpr = function(expr) {
