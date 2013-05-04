@@ -10,8 +10,8 @@
  */
  
 /* requireJS module definition */
-define(["jquery", "straight_line", "circle", "parametric_curve"], 
-       (function($, StraightLine, Circle, ParametricCurve) {
+define(["jquery", "straight_line", "circle", "parametric_curve", "bezier_curve"], 
+       (function($, StraightLine, Circle, ParametricCurve, BezierCurve) {
 
     "use strict"; 
                 
@@ -85,20 +85,45 @@ define(["jquery", "straight_line", "circle", "parametric_curve"],
 		$("#btnNewCurve").click((function() {
 			var _xt = $("#inputXt").val();
 			var _yt = $("#inputYt").val();
-			if(evalExpr(_xt)) {
-				if(evalExpr(_yt)) {
-					var style = { 
+			
+			if (!evalExpr(_xt)){
+				failExpr(_xt);
+				return;
+			}
+			
+			if (!evalExpr(_yt)){
+				failExpr(_yt);
+				return ;
+			}
+			//evaluate expression, given by the user and provide functions
+			if(_xt && _yt) {
+				var xt = function(t) { return eval(_xt); }
+				var yt = function(t) { return eval(_yt); }
+			}
+			
+			var style = { 
 					width: Math.floor(Math.random()*3)+1,
 					color: randomColor()
-					};
-					var curve = new ParametricCurve(style,_xt,_yt,
+				};
+					
+			var curve = new ParametricCurve(style,xt,yt,
 					$("#inputMint").val(), $("#inputMaxt").val(), $("#inputSegments").val(),
 					$("#inputTickmarks").checked=="checked");
 					scene.addObjects([curve]);
 					sceneController.deselect();
 					sceneController.select(curve);
-				} else failExpr(_yt);
-			} else failExpr(_xt);
+			
+		}));
+		
+		$("#btnNewBezierCurve").click((function() {
+					var style = { 
+					width: Math.floor(Math.random()*3)+1,
+					color: randomColor()};
+					var bezierCurve = new BezierCurve(style, [randomX(), randomY()], [randomX(), randomY()],
+					[randomX(), randomY()],[randomX(), randomY()] );
+					scene.addObjects([bezierCurve]);
+					sceneController.deselect();
+					sceneController.select(bezierCurve);
 		}));
 		
 		/* function to evaluate entering of x(t) and y(t) functions */
