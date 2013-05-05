@@ -50,7 +50,7 @@ define(["util", "vec2", "scene", "point_dragger", "control_polygon_drawer" ,"par
 		//create PointDragger objects for each contoll point of the bezier curve
 		$.each(this.controll_points, function (idx, val) {
 			var getP = function() {  return _bezier.controll_points[idx]; };
-			var setP = function(dragEvent) {  _bezier.controll_points[idx] = dragEvent.position;};  //_bezier.redraw();}; 
+			var setP = function(dragEvent) {  _bezier.controll_points[idx] = dragEvent.position; _bezier.redraw();};  
 			draggers.push( new PointDragger(getP, setP, draggerStyle) );
 		});
 		
