@@ -129,11 +129,15 @@ define(["jquery", "straight_line", "circle", "parametric_curve", "bezier_curve"]
 		/* function to evaluate entering of x(t) and y(t) functions */
 		var evalExpr = function(expr) {
 			if(expr == "") {
-				return true;
-			}
-			var _pattern = /[t+*-\/\d]/;
-			if(expr.search(_pattern)== -1) {
 				return false;
+			}
+			var _pattern = /.+\..+\(.*\)/;
+			var _mathPat = /Math\.(sin|cos)\(.*\)/;
+			var _methods = expr.search(_pattern);
+			if(_methods > -1) {
+				if(expr.search(_mathPat) != _methods) {
+					return false;
+				}
 			}
 			return true;
 		};
