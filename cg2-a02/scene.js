@@ -25,8 +25,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         this.programs = {};
         this.programs.vertexColor = new Program(gl, 
                                                 shaders.vs_PerVertexColor(), 
-                                                shaders.fs_PerVertexColor() 
-							);   
+                                                shaders.fs_PerVertexColor()
+												);   
         this.programs.red = new Program(gl, 
                                         shaders.vs_NoColor(), 
                                         shaders.fs_ConstantColor([1.0,0.0,0.0,1.0]) );

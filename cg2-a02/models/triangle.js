@@ -41,7 +41,7 @@ define(["util", "vbo"],
                                                     "dataType": gl.FLOAT,
                                                     "data": coords 
                                                   } );
-        this.attributeBuffer = new vbo.Attribute(gl, { "numComponents": 1,   
+        this.attributeBuffer = new vbo.Attribute(gl, { "numComponents": 3,   
 													  "dataType": gl.FLOAT,
                                                       "data": coords	
 												} );												
@@ -52,6 +52,7 @@ define(["util", "vbo"],
 
         // bind the attribute buffers
         this.coordsBuffer.bind(gl, program, "vertexPosition");
+        this.attributeBuffer.bind(gl, program, "vertexColor");
         
         // connect the vertices with triangles
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.coordsBuffer.numVertices()); 

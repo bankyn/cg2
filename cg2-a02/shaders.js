@@ -94,7 +94,7 @@ define(["util"],
      *  
      */ 
      
-    mod.vertexColor = function() {
+    mod.fs_PerVertexColor = function() {
         
         return [
             "precision mediump float;" ,
