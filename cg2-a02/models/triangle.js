@@ -51,7 +51,8 @@ define(["util", "vbo"],
         this.coordsBuffer.bind(gl, program, "vertexPosition");
         
         // connect the vertices with triangles
-        gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
+        gl.drawArrays(gl.LINE_STRIP, 0, this.coordsBuffer.numVertices()); 
+        gl.drawArrays(gl.LINE_STRIP, 0, this.coordsBuffer.numVertices()); 
          
     };
         
