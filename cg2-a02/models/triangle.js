@@ -41,7 +41,10 @@ define(["util", "vbo"],
                                                     "dataType": gl.FLOAT,
                                                     "data": coords 
                                                   } );
-                    
+        this.attributeBuffer = new vbo.Attribute(gl, { "numComponents": 1,   
+													  "dataType": gl.FLOAT,
+                                                      "data": coords	
+												} );												
     };
 
     // draw method: activate buffers and issue WebGL draw() method
@@ -51,8 +54,8 @@ define(["util", "vbo"],
         this.coordsBuffer.bind(gl, program, "vertexPosition");
         
         // connect the vertices with triangles
-        gl.drawArrays(gl.LINE_STRIP, 0, this.coordsBuffer.numVertices()); 
-        gl.drawArrays(gl.LINE_STRIP, 0, this.coordsBuffer.numVertices()); 
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.coordsBuffer.numVertices()); 
+
          
     };
         

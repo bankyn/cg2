@@ -90,6 +90,20 @@ define(["util"],
             "}" ].join("\n");
     };
 
+	/* 
+     *  
+     */ 
+     
+    mod.vertexColor = function() {
+        
+        return [
+            "precision mediump float;" ,
+            "varying vec4 fragColor;" ,
+            "void main() {" ,
+            "  gl_FragColor = fragColor;" ,
+            "}" ].join("\n");
+    };
+	
                              
     // this module returns an interface containing multiple functions    
     return mod;
