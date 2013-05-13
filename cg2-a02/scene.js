@@ -8,9 +8,9 @@
 
 /* requireJS module definition */
 define(["jquery", "gl-matrix", "util", "program", "shaders", 
-        "models/triangle"], 
+        "models/triangle", "models/cube"], 
        (function($, glmatrix, util, Program, shaders,
-                 Triangle ) {
+                 Triangle, Cube ) {
 
     "use strict";
     
@@ -33,7 +33,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         
         // create some objects to be used for drawing
         this.triangle = new Triangle(gl);
-
+		this.cube = new Cube(gl);
         // initial position of the camera
         this.cameraTransformation = mat4.lookAt([0,0.5,3], [0,0,0], [0,1,0]);
 
@@ -44,7 +44,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         // the HtmlController. Each attribute in this.drawOptions 
         // automatically generates a corresponding checkbox in the UI.
         this.drawOptions = { "Perspective Projection": false, 
-                             "Show Triangle": true
+                             "Show Triangle": true,
+							 "Show Cube": false
                              };                       
     };
 
@@ -80,6 +81,9 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
         }
+		if(this.drawOptions["Show Cube"]) {
+			this.cube.draw(gl, this.programs.red);
+		}
     };
 
     // the scene's rotate method is called from HtmlController, when certain
