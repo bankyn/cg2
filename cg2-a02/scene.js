@@ -8,9 +8,9 @@
 
 /* requireJS module definition */
 define(["jquery", "gl-matrix", "util", "program", "shaders", 
-        "models/triangle", "models/cube"], 
+        "models/triangle", "models/cube", "models/band"], 
        (function($, glmatrix, util, Program, shaders,
-                 Triangle, Cube ) {
+                 Triangle, Cube, Band ) {
 
     "use strict";
     
@@ -30,10 +30,14 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         this.programs.red = new Program(gl, 
                                         shaders.vs_NoColor(), 
                                         shaders.fs_ConstantColor([1.0,0.0,0.0,1.0]) );
-        
+        this.programs.black = new Program(gl,
+										   shaders.vs_NoColor(),
+										   shaders.fs_ConstantColor([0.0,0.0,0.0,0.0]) );
+										   
         // create some objects to be used for drawing
         this.triangle = new Triangle(gl);
 		this.cube = new Cube(gl);
+		this.band = new Band(gl);
         // initial position of the camera
         this.cameraTransformation = mat4.lookAt([0,0.5,3], [0,0,0], [0,1,0]);
 
@@ -45,7 +49,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         // automatically generates a corresponding checkbox in the UI.
         this.drawOptions = { "Perspective Projection": false, 
                              "Show Triangle": true,
-							 "Show Cube": false
+							 "Show Cube": false,
+							 "Show Band": false
                              };                       
     };
 
@@ -82,7 +87,10 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
            this.triangle.draw(gl, this.programs.vertexColor);
         }
 		if(this.drawOptions["Show Cube"]) {
-			this.cube.draw(gl, this.programs.red);
+			this.cube.draw(gl, this.programs.vertexColor);
+		}
+		if(this.drawOptions["Show Band"]) {
+			this.band.draw(gl,this.programs.black);
 		}
     };
 

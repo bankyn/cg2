@@ -96,8 +96,14 @@ define(["util", "vbo"],
                                                     "dataType": gl.FLOAT,
                                                     "data": coords 
                                                   } );
+/*		this.attributeBuffer = new vbo.Attribute(gl, { "numComponents": 3,   
+													  "dataType": gl.FLOAT,
+                                                      "data": coords	
+												} );
+*/												
 		var triangles = [0,1,2, 0,2,3, 0,4,7, 0,3,7, 2,3,7, 2,6,7, 1,2,6, 1,5,6, 4,5,6, 
-							4,7,6, 0,1,5, 0,4,5];
+							4,7,6, 0,1,5, 0,4,5, 8,9,10, 8,11,10, 12,15,14, 12,13,14, 16,17,18,
+							16,19,18, 20,21,22, 20,23,22];
 		this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
 
         
@@ -108,11 +114,12 @@ define(["util", "vbo"],
     
         // bind the attribute buffers
         this.coordsBuffer.bind(gl, program, "vertexPosition");
-        this.triangleBuffer.bind(gl, program, "vertexColor");
+        // this.attributeBuffer.bind(gl, program, "vertexColor");
+		this.triangleBuffer.bind(gl);
         // draw the vertices as points
         // gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
 		// draw vertices as triangles
-		gl.drawElements(gl.TRIANGLES, 12*3, gl.UNSIGNED_SHORT, 0);
+		gl.drawElements(gl.TRIANGLES, 20*3 , gl.UNSIGNED_SHORT, 0);
          
     };
         
