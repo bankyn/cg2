@@ -32,7 +32,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
                                         shaders.fs_ConstantColor([1.0,0.0,0.0,1.0]) );
         this.programs.black = new Program(gl,
 										   shaders.vs_NoColor(),
-										   shaders.fs_ConstantColor([0.0,0.0,0.0,0.0]) );
+										   shaders.fs_ConstantColor([0.0,0.0,0.0,1.0]) );
 										   
         // create some objects to be used for drawing
         this.triangle = new Triangle(gl);

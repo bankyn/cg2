@@ -33,6 +33,7 @@ define(["util", "vbo"],
         var height       = config.height   || 0.1;
         var segments     = config.segments || 20;
         this.asWireframe = config.asWireframe;
+		this.count = 0;
         
         window.console.log("Creating a " + (this.asWireframe? "Wireframe " : "") + 
                             "Band with radius="+radius+", height="+height+", segments="+segments ); 
@@ -57,9 +58,11 @@ define(["util", "vbo"],
         };
 		
 		var triangles = [];
-		// build triangles (not enough)
+		// build triangles
 		for(var i=0; i <= segments; i++) {
 			triangles.push(i,i+1,i+2);
+			triangles.push(i+2,i+1,i+3);
+			this.count += 6;
 		}
 		this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
         
@@ -79,7 +82,7 @@ define(["util", "vbo"],
 		this.triangleBuffer.bind(gl);
         // draw the vertices as points
         // gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
-		gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices(),gl.UNSIGNED_SHORT, 0);
+		gl.drawElements(gl.TRIANGLES, this.count ,gl.UNSIGNED_SHORT, 0);
          
 
     };
