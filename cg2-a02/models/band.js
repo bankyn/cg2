@@ -39,7 +39,7 @@ define(["util", "vbo"],
     
         // generate vertex coordinates and store in an array
         var coords = [];
-        for(var i=0; i<=segments; i++) {
+        for(var i=0; i < segments; i++) {
         
             // X and Z coordinates are on a circle around the origin
             var t = (i/segments)*Math.PI*2;
@@ -53,12 +53,10 @@ define(["util", "vbo"],
             // IMPORTANT: push each float value separately!
             coords.push(x,y0,z);
             coords.push(x,y1,z);
-            
         };
-		
 		var triangles = [];
 		// build triangles
-		for(var i=0; i <= coords.length; i++) {
+		for(var i=0; i <= segments*3; i++) {
 			triangles.push(i,i+1,i+2);
 			triangles.push(i+2,i+1,i+3);
 		}
@@ -81,7 +79,6 @@ define(["util", "vbo"],
         // draw the vertices as points
         // gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
 		gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices()*5 ,gl.UNSIGNED_SHORT, 0);
-         
 
     };
         
