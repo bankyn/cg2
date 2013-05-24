@@ -105,8 +105,16 @@ define(["util", "vbo"],
 							4,7,6, 0,1,5, 0,4,5, 8,9,10, 8,11,10, 12,15,14, 12,13,14, 16,17,18,
 							16,19,18, 20,21,22, 20,23,22];
 		this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
-
-        
+/*		
+		var colors = [
+		  [0, 128, 0, 1],     // Front face
+		  [0, 128, 0, 1],     // Back face
+		  [0, 0, 255, 1],     // Top face
+		  [0, 0, 255, 1],     // Bottom face
+		  [255, 0, 0, 1],     // Right face
+		  [255, 0, 0, 1],     // Left face
+		];
+*/        
     };
 
     // draw method: activate buffers and issue WebGL draw() method

@@ -39,7 +39,7 @@ define(["util", "vbo"],
     
         // generate vertex coordinates and store in an array
         var coords = [];
-        for(var i=0; i < segments; i++) {
+        for(var i=0; i <= segments; i++) {
         
             // X and Z coordinates are on a circle around the origin
             var t = (i/segments)*Math.PI*2;
@@ -56,7 +56,7 @@ define(["util", "vbo"],
         };
 		var triangles = [];
 		// build triangles
-		for(var i=0; i <= segments*3; i++) {
+		for(var i=0; i <= segments*2; i++) {
 			triangles.push(i,i+1,i+2);
 			triangles.push(i+2,i+1,i+3);
 		}
