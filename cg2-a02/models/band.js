@@ -56,7 +56,7 @@ define(["util", "vbo"],
         };
 		var triangles = [];
 		// build triangles
-		for(var i=0; i <= segments*2; i++) {
+		for(var i=0; i <= segments*2+segments/2; i++) {
 			triangles.push(i,i+1,i+2);
 			triangles.push(i+2,i+1,i+3);
 		}
@@ -78,7 +78,8 @@ define(["util", "vbo"],
 		this.triangleBuffer.bind(gl);
         // draw the vertices as points
         // gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
-		gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices()*5 ,gl.UNSIGNED_SHORT, 0);
+		// magic number 13, should be replaced by formula
+		gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices()*6-13 ,gl.UNSIGNED_SHORT, 0); 
 
     };
         
