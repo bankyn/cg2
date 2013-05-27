@@ -139,7 +139,7 @@ define(["util", "vbo"],
         // draw the vertices as points
         // gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
 		// draw vertices as triangles
-		gl.drawElements(gl.TRIANGLES, 12*3 , gl.UNSIGNED_SHORT, 0);
+		gl.drawElements(gl.TRIANGLES, (this.coordsBuffer.numVertices()/2)*3 , gl.UNSIGNED_SHORT, 0);
          
     };
         
