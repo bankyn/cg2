@@ -38,6 +38,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         this.triangle = new Triangle(gl);
 		this.cube = new Cube(gl);
 		this.band = new Band(gl);
+		this.wireBand = new Band(gl,{"asWireframe": true});
         // initial position of the camera
         this.cameraTransformation = mat4.lookAt([0,0.5,3], [0,0,0], [0,1,0]);
 
@@ -50,7 +51,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         this.drawOptions = { "Perspective Projection": false, 
                              "Show Triangle": true,
 							 "Show Cube": false,
-							 "Show Band": false
+							 "Show Band": false,
+							 "Wireframe Band": false
                              };                       
     };
 
@@ -90,7 +92,10 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 			this.cube.draw(gl, this.programs.vertexColor);
 		}
 		if(this.drawOptions["Show Band"]) {
-			this.band.draw(gl,this.programs.black);
+			this.band.draw(gl,this.programs.red);
+		}
+		if(this.drawOptions["Wireframe Band"]) {
+			this.wireBand.draw(gl,this.programs.black);
 		}
     };
 

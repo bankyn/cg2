@@ -31,18 +31,18 @@ define(["util", "vbo"],
         config = config || {};
         var radius       = config.radius   || 1.0;
         var height       = config.height   || 0.1;
-        var segments     = config.segments || 20;
+        this.segments     = config.segments || 20;
         this.asWireframe = config.asWireframe;
         
         window.console.log("Creating a " + (this.asWireframe? "Wireframe " : "") + 
-                            "Band with radius="+radius+", height="+height+", segments="+segments ); 
+                            "Band with radius="+radius+", height="+height+", segments="+this.segments ); 
     
         // generate vertex coordinates and store in an array
         var coords = [];
-        for(var i=0; i <= segments; i++) {
+        for(var i=0; i <= this.segments; i++) {
         
             // X and Z coordinates are on a circle around the origin
-            var t = (i/segments)*Math.PI*2;
+            var t = (i/this.segments)*Math.PI*2;
             var x = Math.sin(t) * radius;
             var z = Math.cos(t) * radius;
             // Y coordinates are simply -height/2 and +height/2 
@@ -54,13 +54,31 @@ define(["util", "vbo"],
             coords.push(x,y0,z);
             coords.push(x,y1,z);
         };
-		var triangles = [];
-		// build triangles
-		for(var i=0; i <= segments*2+segments/2; i++) {
-			triangles.push(i,i+1,i+2);
-			triangles.push(i+2,i+1,i+3);
+		// wireframe drawing ?
+		this.indicesCount = 0;
+		if(this.asWireframe) {
+			var lines = [];
+			// build lines
+			for(var i=0; i <= this.segments*3; i += 2) {
+				lines.push(i, i+1);
+				lines.push(i, i+2);
+				this.indicesCount += 4;
+			}
+			lines.push(0,this.segments+2);
+			this.indicesCount += 2;
+			console.log(coords.length);
+			console.log(this.indicesCount);
+			this.lineBuffer = new vbo.Indices(gl, {"indices" : lines});
+		} else {
+			var triangles = [];
+			// build triangles
+			for(var i=0; i <= this.segments*2+this.segments/2; i++) {
+				triangles.push(i,i+1,i+2);
+				triangles.push(i+2,i+1,i+3);
+				this.indicesCount += 6;
+			}
+			this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
 		}
-		this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
         
         // create vertex buffer object (VBO) for the coordinates
         this.coordsBuffer = new vbo.Attribute(gl, { "numComponents": 3,
@@ -75,11 +93,16 @@ define(["util", "vbo"],
     
         // bind the attribute buffers
         this.coordsBuffer.bind(gl, program, "vertexPosition");
-		this.triangleBuffer.bind(gl);
         // draw the vertices as points
         // gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
-		// magic number 13, should be replaced by formula
-		gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices()*6-13 ,gl.UNSIGNED_SHORT, 0); 
+		if(!this.asWireframe) {
+			this.triangleBuffer.bind(gl);
+			// magic number 13, should be replaced by formula
+			gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices()*6-13 ,gl.UNSIGNED_SHORT, 0); 
+		} else {
+			this.lineBuffer.bind(gl);
+			gl.drawElements(gl.LINES, this.indicesCount/2 + this.segments ,gl.UNSIGNED_SHORT, 0);
+		}
 
     };
         
