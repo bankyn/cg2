@@ -54,20 +54,20 @@ define(["util", "vbo"],
             coords.push(x,y0,z);
             coords.push(x,y1,z);
         };
-		// wireframe drawing ?
+		// counting pushed indices
 		this.indicesCount = 0;
+		// wireframe drawing ?
 		if(this.asWireframe) {
 			var lines = [];
 			// build lines
 			for(var i=0; i <= this.segments*3; i += 2) {
 				lines.push(i, i+1);
 				lines.push(i, i+2);
-				this.indicesCount += 4;
+				lines.push(i+1, i+3);
+				this.indicesCount += 6;
 			}
 			lines.push(0,this.segments+2);
 			this.indicesCount += 2;
-			console.log(coords.length);
-			console.log(this.indicesCount);
 			this.lineBuffer = new vbo.Indices(gl, {"indices" : lines});
 		} else {
 			var triangles = [];
@@ -77,6 +77,8 @@ define(["util", "vbo"],
 				triangles.push(i+2,i+1,i+3);
 				this.indicesCount += 6;
 			}
+			// because last loop irrelevant
+			this.indicesCount -= 7;
 			this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
 		}
         
@@ -97,11 +99,11 @@ define(["util", "vbo"],
         // gl.drawArrays(gl.POINTS, 0, this.coordsBuffer.numVertices()); 
 		if(!this.asWireframe) {
 			this.triangleBuffer.bind(gl);
-			// magic number 13, should be replaced by formula
-			gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices()*6-13 ,gl.UNSIGNED_SHORT, 0); 
+			// gl.drawElements(gl.TRIANGLES, this.coordsBuffer.numVertices()*6-13 ,gl.UNSIGNED_SHORT, 0);
+			gl.drawElements(gl.TRIANGLES, this.indicesCount - this.segments*3 ,gl.UNSIGNED_SHORT, 0); 
 		} else {
 			this.lineBuffer.bind(gl);
-			gl.drawElements(gl.LINES, this.indicesCount/2 + this.segments ,gl.UNSIGNED_SHORT, 0);
+			gl.drawElements(gl.LINES, this.indicesCount/2 + this.segments+ this.segments/4 + 1 ,gl.UNSIGNED_SHORT, 0);
 		}
 
     };
