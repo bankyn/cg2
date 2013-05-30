@@ -48,7 +48,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         // the scene has an attribute "drawOptions" that is used by 
         // the HtmlController. Each attribute in this.drawOptions 
         // automatically generates a corresponding checkbox in the UI.
-        this.drawOptions = { "Perspective Projection": false, 
+        this.drawOptions = { "Perspective Projection": false,
+							 "Depth Test": true,
                              "Show Triangle": true,
 							 "Show Cube": false,
 							 "Show Band": false,
@@ -81,8 +82,12 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); 
             
         // set up depth test to discard occluded fragments
-        gl.enable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.LESS);  
+        if(this.drawOptions["Depth Test"]) {
+			gl.enable(gl.DEPTH_TEST);
+		} else {
+			gl.disable(gl.DEPTH_TEST);
+		}
+        gl.depthFunc(gl.LESS);
                 
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
@@ -91,11 +96,12 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		if(this.drawOptions["Show Cube"]) {
 			this.cube.draw(gl, this.programs.vertexColor);
 		}
-		if(this.drawOptions["Show Band"]) {
-			this.band.draw(gl,this.programs.red);
-		}
 		if(this.drawOptions["Wireframe Band"]) {
 			this.wireBand.draw(gl,this.programs.black);
+			gl.polygonOffset(0,1);
+		}
+		if(this.drawOptions["Show Band"]) {
+			this.band.draw(gl,this.programs.red);
 		}
     };
 
