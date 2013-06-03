@@ -12,16 +12,27 @@ define(["util", "vbo", "triangle", "band", "cube", "scene_node","gl-matrix"],
     "use strict";
     
     // constructor, takes WebGL context object as argument
-    var Robot = function(gl) {
+    var Robot = function(gl, programs, config) {
 		
+		// components
 		var cube = new Cube(gl);
-		var band = new Band(gl, {radius: 0.5, height: 1.0, segments: 30});
-		var triangle = new Triangle(gl);
-		// Dimensions
-		var torso_size = [0.8, 2.0, 0.5];
-		//Skeleton
-		this.head = new SceneNode("head");
+		var band = new Band(gl, {radius: 2, height: 2, segments: 30});
+	
+		// dimensions
+		var head_size = [4.0, 4.0, 4.0];
+		var torso_size = [8.0, 16.0, 5.0];
+		var arm_size = [2.0, 4.0, 2.0];
+		
+		// skeleton
+		// the neck is one part of the head
 		this.neck = new SceneNode("neck");
+		// ???Band Ursprung???   position of the neck is [0, TB/2, 0]
+		
+		// head
+		this.head = new SceneNode("head", [this.neck]);
+		// position of the head is [0-2, TB/2 + HB, 0-2]; 
+		mat4.translate(head.transformation, [head_size[0]/2, torso_size[0] + HB + head_size[1]/2, head_size[2]/2]);
+		
 		
 		this.shoulder = new SceneNode("shoulder");
 		this.hand = new SceneNode("hand");
