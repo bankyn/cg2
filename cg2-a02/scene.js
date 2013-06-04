@@ -50,6 +50,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         // automatically generates a corresponding checkbox in the UI.
         this.drawOptions = { "Perspective Projection": false,
 							 "Depth Test": true,
+							 "Cullface": false,
                              "Show Triangle": true,
 							 "Show Cube": false,
 							 "Show Band": false,
@@ -90,6 +91,13 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         gl.depthFunc(gl.LESS);
 		gl.enable(gl.POLYGON_OFFSET_FILL);
 		gl.polygonOffset(1,1);
+		
+		if(this.drawOptions["Cullface"]) {
+			gl.enable(gl.CULL_FACE);
+		}
+		else {
+			gl.disable(gl.CULL_FACE);
+		}
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
