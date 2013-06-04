@@ -111,18 +111,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		else {
 			gl.disable(gl.CULL_FACE);
 		}
-		/*
-		if(this.drawOptions["Cullface"] || this.drawOptions["Backface"]) {
-			gl.enable(gl.CULL_FACE);
-			if(this.drawOptions["Cullface"]) {
-				gl.cullFace(gl.FRONT);
-			} else {
-				gl.cullFace(gl.BACK);
-			}
-		} else {
-			gl.disable(gl.CULL_FACE);
-		}
-		*/
+		
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
