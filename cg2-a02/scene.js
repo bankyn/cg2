@@ -88,7 +88,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 			gl.disable(gl.DEPTH_TEST);
 		}
         gl.depthFunc(gl.LESS);
-                
+		gl.enable(gl.POLYGON_OFFSET_FILL);
+		gl.polygonOffset(1,1);
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
@@ -98,7 +99,6 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		}
 		if(this.drawOptions["Wireframe Band"]) {
 			this.wireBand.draw(gl,this.programs.black);
-			gl.polygonOffset(0,1);
 		}
 		if(this.drawOptions["Show Band"]) {
 			this.band.draw(gl,this.programs.red);
