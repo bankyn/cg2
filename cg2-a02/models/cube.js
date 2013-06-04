@@ -110,7 +110,7 @@ define(["util", "vbo"],
 							8,10,11, 8,9,10,	//left
 							12,13,14, 12,14,15, //right
 							16,17,19, 17,18,19, //top
-							20,21,23, 20,21,22  //bottom
+							20,22,23, 20,21,22  //bottom
 							];
 		
 		this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
