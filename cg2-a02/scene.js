@@ -40,6 +40,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		this.band = new Band(gl);
 		this.wireBand = new Band(gl,{"asWireframe": true});
 		this.robot = new Robot(gl, this.programs.red, this.transformation);
+		this.active_joint = [false,false,false, false];
         // initial position of the camera
         this.cameraTransformation = mat4.lookAt([0,0.5,3], [0,0,0], [0,1,0]);
 
@@ -57,7 +58,12 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 							 "Show Cube": false,
 							 "Show Band": false,
 							 "Wireframe Band": false,
-							 "Show Robot": false
+							 "Show Robot": false,
+							 //robot options 
+							 "Rotate Scene": false,
+							 "Rotate Hand": false,
+							 "Rotate Joint": false,
+							 "Rotate Head": false,
                              };                       
     };
 
@@ -105,6 +111,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		} else {
 			gl.disable(gl.CULL_FACE);
 		}
+		this.active_joint = [false,false,false,false];
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
@@ -121,6 +128,19 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		if(this.drawOptions["Show Robot"]) {    
            this.robot.draw(gl, this.programs.vertexColor, this.transformation);
 		}
+		if(this.drawOptions["Rotate Scene"]) {   
+		   this.active_joint[0] = true;	
+         }
+		if(this.drawOptions["Rotate Hand"]) {   
+		   this.active_joint[1] = true;	
+         }
+		 
+		 if(this.drawOptions["Rotate Joint"]) {   
+		   this.active_joint[2] = true;	
+         }
+		 if(this.drawOptions["Rotate Head"]) {   
+		   this.active_joint[3] = true;	
+         }
     };
 
     // the scene's rotate method is called from HtmlController, when certain
@@ -135,11 +155,17 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         // manipulate the corresponding matrix, depending on the name of the joint
         switch(rotationAxis) {
             case "worldY": 
+				if(this.active_joint[0]){
                 mat4.rotate(this.transformation, angle, [0,1,0]);
+				}
+				this.robot.rotate(angle, [0,1,0], this.active_joint);
                 break;
             case "worldX": 
+			if(this.active_joint[0]){
                 mat4.rotate(this.transformation, angle, [1,0,0]);
-                break;
+				}
+                this.robot.rotate(angle, [1,0,0], this.active_joint);
+				break;
             default:
                 window.console.log("axis " + rotationAxis + " not implemented.");
             break;

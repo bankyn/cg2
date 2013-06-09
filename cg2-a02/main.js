@@ -74,7 +74,6 @@ define(["jquery", "gl-matrix", "util", "scene", "animation", "html_controller"],
             
             // set the scene's transformation to what we have calculated
             scene.transformation = matrix;
-            
             // (re-) draw the scene
             scene.draw();
             

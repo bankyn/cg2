@@ -25,7 +25,7 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
 		var neck_size = [1, 1, 1];
 		var arm_size = [2, 4, 2];
 		var hand_size = [1, 1, 1];
-		var joint_size = [2, 1, 1];
+		var joint_size = head_size[0]/2;
 		
 		
 		// skeleton
@@ -43,27 +43,7 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
 		// arm
 
 
-		this.hand = new SceneNode("hand");
-		mat4.translate(this.hand.transformation, [0, -arm_size[1]/2, 0]);
-		
-		this.armPart2 = new SceneNode("armPart2",[this.hand]);
-		mat4.translate(this.armPart2.transformation, [0, -(arm_size[1]+joint_size[1])/2, 0]);
-		
-		this.joint = new SceneNode("joint",[this.armPart2]);
-		mat4.translate(this.joint.transformation, [0, -arm_size[1]/2, 0]);
-		
-		this.armPart1 = new SceneNode("armPart1",[this.joint]);
-		mat4.translate(this.armPart1.transformation, [0, -(arm_size[1]+joint_size[1])/2, 0]);
-		
-		this.shoulder = new SceneNode("shoulder", [this.armPart1]);
-		mat4.translate(this.shoulder.transformation, [0, -joint_size[1]/2, 0]);
-		
-		this.arm = new SceneNode("arm",[this.shoulder]);
-		mat4.translate(this.arm.transformation, [(torso_size[0]+arm_size[0])/2 , torso_size[1]/2, 0]);
-		
-		this.torso = new SceneNode("torso", [this.head, this.neck, this.arm]);
-		
-		/*
+
 		this.hand = new SceneNode("hand");
 		mat4.translate(this.hand.transformation, [0, -arm_size[1], 0]);
 		
@@ -78,8 +58,6 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
 		mat4.translate(this.arm.transformation, [torso_size[0]/2, 1, 0]);
 		
 		this.torso = new SceneNode("torso", [this.head, this.neck, this.arm]);
-		*/
-		
 		
 		//Skins
 		var torsoSkin = new SceneNode("torsoSkin", [cube], programs.vertexColor);
@@ -90,7 +68,7 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
 		//mat4.scale(neckSkin.transformation, neck_size);
 		var handSkin = new SceneNode("handSkin", [triangle], programs.vertexColor);
 		mat4.scale(handSkin.transformation, hand_size);
-		var shoulderSkin = new SceneNode("shoulderSkin", [cube], programs.vertexColor);
+		var shoulderSkin = new SceneNode("shoulderSkin", [cube], programs.vertexolor);
 		mat4.scale(shoulderSkin.transformation, joint_size);
 		var armPartSkin = new SceneNode("armPartSkin", [cube], programs.vertexColor);
 		mat4.scale(armPartSkin.transformation, arm_size);
@@ -101,12 +79,12 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
 		this.shoulder.addObjects([shoulderSkin]);
 		this.armPart1.addObjects([armPartSkin]);
 		this.armPart2.addObjects([armPartSkin]);
-		this.joint.addObjects([jointSkin]);
+		//this.joint.addObjects([jointSkin]);
 		//this.arm.addObjects([handSkin, shoulderSkin, armPartSkin, this.joint]);
 		this.torso.addObjects([torsoSkin]);
 		this.head.addObjects([headSkin]);
 		this.neck.addObjects([neckSkin]);
-		this.robot.addObjects([this.torso]);
+		this.robot.addObjects([this.torso, this.head, this.arm]);
 	
     };
 
@@ -116,21 +94,6 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
          
     };
         
-	//Roboter animation
-	Robot.prototype.rotate = function(angle, rotationAxis, joints) {
-		// rotates the given joint
-		//mat4.rotate(this.hand.transformation, angle, rotationAxis);
-		if(joints[1]){
-			mat4.rotate(this.hand.transformation, angle, rotationAxis);
-		}		
-		if(joints[2]){
-			mat4.rotate(this.arm.transformation, angle, rotationAxis);
-		}
-		if(joints[3]){
-			mat4.rotate(this.head.transformation, angle, rotationAxis);
-		}
-	}
-
     // this module only returns the constructor function    
     return Robot;
 
