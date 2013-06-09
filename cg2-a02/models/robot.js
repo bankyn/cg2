@@ -41,8 +41,6 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
 		mat4.translate(this.head.transformation, [0, headY, 0]);
 		
 		// arm
-
-
 		this.hand = new SceneNode("hand");
 		mat4.translate(this.hand.transformation, [0, -arm_size[1]/2, 0]);
 		
@@ -62,23 +60,6 @@ define(["util", "vbo", "models/triangle", "models/band", "models/cube", "scene_n
 		mat4.translate(this.arm.transformation, [(torso_size[0]+arm_size[0])/2 , torso_size[1]/2, 0]);
 		
 		this.torso = new SceneNode("torso", [this.head, this.neck, this.arm]);
-		
-		/*
-		this.hand = new SceneNode("hand");
-		mat4.translate(this.hand.transformation, [0, -arm_size[1], 0]);
-		
-		this.armPart2 = new SceneNode("armPart2",[this.hand]);
-		mat4.translate(this.armPart2.transformation, [0, -arm_size[1]/2, 0]);
-		this.joint = new SceneNode("joint",[this.armPart2]);
-		this.armPart1 = new SceneNode("armPart1",[this.joint]);
-		mat4.translate(this.armPart1.transformation, [0, arm_size[1]/2, 0]);
-		this.shoulder = new SceneNode("shoulder", [this.armPart1]);
-		mat4.translate(this.shoulder.transformation, [0, arm_size[1], 0]);
-		this.arm = new SceneNode("arm",[this.shoulder]);
-		mat4.translate(this.arm.transformation, [torso_size[0]/2, 1, 0]);
-		
-		this.torso = new SceneNode("torso", [this.head, this.neck, this.arm]);
-		*/
 		
 		
 		//Skins
