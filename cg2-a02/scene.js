@@ -8,9 +8,9 @@
 
 /* requireJS module definition */
 define(["jquery", "gl-matrix", "util", "program", "shaders", 
-        "models/triangle", "models/cube", "models/band"], 
+        "models/triangle", "models/cube", "models/band", "models/robot"], 
        (function($, glmatrix, util, Program, shaders,
-                 Triangle, Cube, Band ) {
+                 Triangle, Cube, Band, Robot) {
 
     "use strict";
     
@@ -39,6 +39,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		this.cube = new Cube(gl);
 		this.band = new Band(gl);
 		this.wireBand = new Band(gl,{"asWireframe": true});
+		this.robot = new Robot(gl, this.programs.red, this.transformation);
+		this.active_joint = [false,false,false, false];
         // initial position of the camera
         this.cameraTransformation = mat4.lookAt([0,0.5,3], [0,0,0], [0,1,0]);
 
@@ -55,7 +57,13 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
                              "Show Triangle": true,
 							 "Show Cube": false,
 							 "Show Band": false,
-							 "Wireframe Band": false
+							 "Wireframe Band": false,
+							 "Show Robot": false,
+							 //robot options 
+							 "Rotate Scene": false,
+							 "Rotate Hand": false,
+							 "Rotate Joint": false,
+							 "Rotate Head": false,
                              };                       
     };
 
@@ -89,29 +97,21 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		} else {
 			gl.disable(gl.DEPTH_TEST);
 		}
-        
-		// depth settings
-		gl.depthFunc(gl.LESS);
+        gl.depthFunc(gl.LESS);
 		gl.enable(gl.POLYGON_OFFSET_FILL);
 		gl.polygonOffset(1,1);
 		
-		//face culling
-		if(this.drawOptions["Cullface"] || this.drawOptions["Backface"]) { 
+		if(this.drawOptions["Cullface"] || this.drawOptions["Backface"]) {
 			gl.enable(gl.CULL_FACE);
-			if(this.drawOptions["Cullface"] && this.drawOptions["Backface"]) { // front and back culling
-				gl.cullFace(gl.FRONT_AND_BACK);
-			}
-			else if(this.drawOptions["Cullface"]) { // front culling
+			if(this.drawOptions["Cullface"]) {
 				gl.cullFace(gl.FRONT);
-			} 
-			else {
-				gl.cullFace(gl.BACK); // back culling
+			} else {
+				gl.cullFace(gl.BACK);
 			}
-		}
-		else {
+		} else {
 			gl.disable(gl.CULL_FACE);
 		}
-		
+		this.active_joint = [false,false,false,false];
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
@@ -125,6 +125,22 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		if(this.drawOptions["Show Band"]) {
 			this.band.draw(gl,this.programs.red);
 		}
+		if(this.drawOptions["Show Robot"]) {    
+           this.robot.draw(gl, this.programs.vertexColor, this.transformation);
+		}
+		if(this.drawOptions["Rotate Scene"]) {   
+		   this.active_joint[0] = true;	
+         }
+		if(this.drawOptions["Rotate Hand"]) {   
+		   this.active_joint[1] = true;	
+         }
+		 
+		 if(this.drawOptions["Rotate Joint"]) {   
+		   this.active_joint[2] = true;	
+         }
+		 if(this.drawOptions["Rotate Head"]) {   
+		   this.active_joint[3] = true;	
+         }
     };
 
     // the scene's rotate method is called from HtmlController, when certain
@@ -139,11 +155,17 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
         // manipulate the corresponding matrix, depending on the name of the joint
         switch(rotationAxis) {
             case "worldY": 
+				if(this.active_joint[0]){
                 mat4.rotate(this.transformation, angle, [0,1,0]);
+				}
+				this.robot.rotate(angle, [0,1,0], this.active_joint);
                 break;
             case "worldX": 
+			if(this.active_joint[0]){
                 mat4.rotate(this.transformation, angle, [1,0,0]);
-                break;
+				}
+                this.robot.rotate(angle, [1,0,0], this.active_joint);
+				break;
             default:
                 window.console.log("axis " + rotationAxis + " not implemented.");
             break;
