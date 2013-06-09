@@ -97,21 +97,33 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		} else {
 			gl.disable(gl.DEPTH_TEST);
 		}
-        gl.depthFunc(gl.LESS);
+        
+		// depth settings
+		gl.depthFunc(gl.LESS);
 		gl.enable(gl.POLYGON_OFFSET_FILL);
 		gl.polygonOffset(1,1);
 		
-		if(this.drawOptions["Cullface"] || this.drawOptions["Backface"]) {
+		//face culling
+		if(this.drawOptions["Cullface"] || this.drawOptions["Backface"]) { 
 			gl.enable(gl.CULL_FACE);
-			if(this.drawOptions["Cullface"]) {
-				gl.cullFace(gl.FRONT);
-			} else {
-				gl.cullFace(gl.BACK);
+			if(this.drawOptions["Cullface"] && this.drawOptions["Backface"]) { // front and back culling
+				gl.cullFace(gl.FRONT_AND_BACK);
 			}
-		} else {
+			else if(this.drawOptions["Cullface"]) { // front culling
+				gl.cullFace(gl.FRONT);
+			} 
+			else {
+				gl.cullFace(gl.BACK); // back culling
+			}
+		}
+		else {
 			gl.disable(gl.CULL_FACE);
 		}
+<<<<<<< HEAD
 		this.active_joint = [false,false,false,false];
+=======
+		
+>>>>>>> 7edf6130e92bebdbfa5fac2ec11982e2d7f591b4
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
