@@ -119,11 +119,9 @@ define(["jquery", "gl-matrix", "util", "program", "shaders",
 		else {
 			gl.disable(gl.CULL_FACE);
 		}
-<<<<<<< HEAD
+
 		this.active_joint = [false,false,false,false];
-=======
-		
->>>>>>> 7edf6130e92bebdbfa5fac2ec11982e2d7f591b4
+
         // draw the scene objects
         if(this.drawOptions["Show Triangle"]) {    
            this.triangle.draw(gl, this.programs.vertexColor);
