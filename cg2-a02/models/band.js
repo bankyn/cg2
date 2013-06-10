@@ -71,8 +71,9 @@ define(["util", "vbo"],
 		} else {
 			var triangles = [];
 			// build triangles
-			for(var i=0; i < segments * 2; i++) {
+			for(var i=0; i < segments * 2; i+=2) {
 				triangles.push(i+2, i+1, i);
+				triangles.push(i+3, i+1, i+2);
 			}
 			this.triangleBuffer = new vbo.Indices(gl, {"indices" : triangles});
 		}
