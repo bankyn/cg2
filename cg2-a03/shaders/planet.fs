@@ -33,6 +33,10 @@ struct PhongMaterial {
 // uniform variable for the currently active PhongMaterial
 uniform PhongMaterial material;
 
+// debugging uniforms
+uniform bool debug;
+uniform vec3 debugColor;
+
 // Light Source Data for a directional light (not point light)
 struct LightSource {
 
@@ -73,7 +77,7 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     // diffuse contribution
     vec3 diffuseCoeff = material.diffuse;
     vec3 diffuse = diffuseCoeff * light.color * ndotl;
-
+	
      // reflected light direction = perfect reflection direction
     vec3 r = reflect(l,n);
     
@@ -84,6 +88,11 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     vec3 specularCoeff = material.specular;
     float shininess = material.shininess;
     vec3 specular = specularCoeff * light.color * pow(rdotv, shininess);
+ 
+	//color for debug mode
+	if(debug) {
+		return debugColor;
+	}
  
     // return sum of all contributions
     return ambient + diffuse + specular;

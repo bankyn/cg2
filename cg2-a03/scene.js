@@ -35,6 +35,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
 											   Shader("planet_fs") );
 		this.programs.planet.use();
 		this.programs.planet.setUniform("ambientLight", "vec3", [0.4,0.4,0.4]);
+		this.programs.planet.setUniform("debugColor", "vec3", [0,1,0]);
 		
         // in 3.2 create textures from image files here...
         
@@ -88,6 +89,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         this.drawOptions = { 
                              "Show Planet": true,
                              "Show Ring": false,
+							 "Debug": false,
                              };                       
     };
 
@@ -96,6 +98,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         
         // just a shortcut
         var gl = this.gl;
+		// checking debug mode
+		this.programs.planet.setUniform("debug", "bool", this.drawOptions["Debug"]);
 
         // set up the projection matrix, depending on the canvas size
         var aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
