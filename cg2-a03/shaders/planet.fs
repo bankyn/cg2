@@ -70,7 +70,7 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     vec3 ambient = material.ambient * ambientLight;
 	
 	//debug color
-	if(debug && (ndotl >= 0.0  && ndotl < 0.05)) {
+	if(debug && (ndotl >= 0.0  && ndotl <= 0.05)) {
 		return debugColor;
 	}
 	
