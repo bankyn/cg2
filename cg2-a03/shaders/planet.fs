@@ -68,12 +68,17 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     // ambient part, this is a constant term shown on the
     // all sides of the object
     vec3 ambient = material.ambient * ambientLight;
-
+	
+	//debug color
+	if(debug && (ndotl >= 0.0  && ndotl < 0.05)) {
+		return debugColor;
+	}
+	
     // is the current fragment's normal pointing away from the light?
     // then we are on the "back" side of the object, as seen from the light
-    if(ndotl<=0.0)
+    if(ndotl <= 0.0)
         return ambient;
-
+	
     // diffuse contribution
     vec3 diffuseCoeff = material.diffuse;
     vec3 diffuse = diffuseCoeff * light.color * ndotl;
@@ -83,16 +88,11 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     
     // cosine of angle between reflection dir and viewing dir
     float rdotv = max( dot(r,v), 0.0);
-    
+	
     // specular contribution
     vec3 specularCoeff = material.specular;
     float shininess = material.shininess;
     vec3 specular = specularCoeff * light.color * pow(rdotv, shininess);
- 
-	//color for debug mode
-	if(debug) {
-		return debugColor;
-	}
  
     // return sum of all contributions
     return ambient + diffuse + specular;
@@ -119,6 +119,5 @@ void main() {
                         light, material );
     
     // set fragment color
-    gl_FragColor = vec4(color, 1.0);
-    
+	gl_FragColor = vec4(color, 1.0);
 }

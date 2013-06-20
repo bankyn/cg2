@@ -29,13 +29,15 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
                                               Shader("phong_fs")  );
         this.programs.phong.use();
         this.programs.phong.setUniform("ambientLight", "vec3", [0.4,0.4,0.4]);
+		this.programs.phong.setUniform("debugColor", "vec3", [0.0,1.0,0.0]);
+
 		
 		// create WebGL program for planet illumination
 		this.programs.planet = new Program(gl, Shader("planet_vs"),
 											   Shader("planet_fs") );
 		this.programs.planet.use();
 		this.programs.planet.setUniform("ambientLight", "vec3", [0.4,0.4,0.4]);
-		this.programs.planet.setUniform("debugColor", "vec3", [0,1,0]);
+		this.programs.planet.setUniform("debugColor", "vec3", [0.0,1.0,0.0]);
 		
         // in 3.2 create textures from image files here...
         
@@ -55,7 +57,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         // light source 
         this.sun = new light.DirectionalLight("light",  
                                               {"direction": [-1,0,0], "color": [1,1,1] },
-                                              [this.programs.phong, this.programs.planet]); 
+                                              [this.programs.planet, this.programs.phong]); 
         this.sunNode = new SceneNode("Sunlight", [this.sun]);
                                 
         // equator ring for orientation
@@ -89,7 +91,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         this.drawOptions = { 
                              "Show Planet": true,
                              "Show Ring": false,
-							 "Debug": false,
+							 "Debug": false
                              };                       
     };
 
@@ -99,8 +101,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         // just a shortcut
         var gl = this.gl;
 		// checking debug mode
-		this.programs.planet.setUniform("debug", "bool", this.drawOptions["Debug"]);
-
+		console.log(this.drawOptions["Debug"]);
+		
         // set up the projection matrix, depending on the canvas size
         var aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
         var projection = mat4.perspective(45, aspectRatio, 0.01, 100);
@@ -113,6 +115,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         for(var p in this.programs) {
             this.programs[p].use();
             this.programs[p].setUniform("projectionMatrix", "mat4", projection);
+			this.programs[p].setUniform("debug", "bool", this.drawOptions["Debug"]);
+
         }
         
         // clear color and depth buffers
