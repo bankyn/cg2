@@ -106,6 +106,10 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         // just a shortcut
         var gl = this.gl;
 		// checking debug mode
+<<<<<<< HEAD
+=======
+		console.log(this.drawOptions["Debug"]);
+>>>>>>> 42cd7ba7551595276a625607bcd55fa1173be09b
 		
         // set up the projection matrix, depending on the canvas size
         var aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
@@ -120,6 +124,10 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
             this.programs[p].use();
             this.programs[p].setUniform("projectionMatrix", "mat4", projection);
 			this.programs[p].setUniform("debug", "bool", this.drawOptions["Debug"]);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 42cd7ba7551595276a625607bcd55fa1173be09b
         }
 		this.programs.planet.setUniform("Daytime", "bool", this.drawOptions["Daytime"]);
 		this.programs.planet.setUniform("NightTime", "bool", this.drawOptions["NightTime"]);

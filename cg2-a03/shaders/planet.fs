@@ -91,7 +91,6 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
 			return texture2D(nightTexture,texCoords.st).rgb;
 		}
 	}
-	
     // diffuse contribution
     vec3 diffuseCoeff = material.diffuse;
 	if(Daytime && ndotl > 0.0) {
