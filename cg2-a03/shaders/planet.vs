@@ -17,15 +17,23 @@
 
 attribute vec3 vertexPosition;
 attribute vec3 vertexNormal;
+attribute vec2 vertexTexCoords;
 
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat3 normalMatrix;
 
+//texture uniforms
+uniform bool Daytime;
+uniform bool NightTime;
+uniform sampler2D daylightTexture;
+uniform sampler2D nightTexture;
+
 // debugging uniforms
 uniform bool debug;
 uniform vec3 debugColor;
 
+varying vec2 texCoords;
 varying vec4 ecPosition;
 varying vec3 ecNormal;
 
@@ -35,7 +43,7 @@ void main() {
     // for lighting calculations
     ecPosition   = modelViewMatrix * vec4(vertexPosition,1.0);
     ecNormal     = normalize(normalMatrix*vertexNormal);
-    
+    texCoords = vertexTexCoords;
     // set the fragment position in clip coordinates
     gl_Position  = projectionMatrix * ecPosition;
     

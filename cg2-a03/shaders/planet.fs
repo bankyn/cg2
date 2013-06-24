@@ -15,6 +15,7 @@ precision mediump float;
 // position and normal in eye coordinates
 varying vec4  ecPosition;
 varying vec3  ecNormal;
+varying vec2 texCoords;
 
 // transformation matrices
 uniform mat4  modelViewMatrix;
@@ -32,6 +33,12 @@ struct PhongMaterial {
 };
 // uniform variable for the currently active PhongMaterial
 uniform PhongMaterial material;
+
+//texture uniforms
+uniform bool Daytime;
+uniform bool NightTime;
+uniform sampler2D daylightTexture;
+uniform sampler2D nightTexture;
 
 // debugging uniforms
 uniform bool debug;
@@ -68,14 +75,28 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     // ambient part, this is a constant term shown on the
     // all sides of the object
     vec3 ambient = material.ambient * ambientLight;
-
+	
+	//debug color
+	if(debug && (ndotl >= 0.0  && ndotl <= 0.05)) {
+		return debugColor;
+	}
+	
     // is the current fragment's normal pointing away from the light?
     // then we are on the "back" side of the object, as seen from the light
-    if(ndotl<=0.0)
-        return ambient;
-
+    if(ndotl <= 0.0) {
+        if(!NightTime) {
+			return ambient;
+		}
+		else {
+			return texture2D(nightTexture,texCoords.st).rgb;
+		}
+	}
+	
     // diffuse contribution
     vec3 diffuseCoeff = material.diffuse;
+	if(Daytime && ndotl > 0.0) {
+		diffuseCoeff = texture2D(daylightTexture,texCoords.st).rgb;
+	}
     vec3 diffuse = diffuseCoeff * light.color * ndotl;
 	
      // reflected light direction = perfect reflection direction
@@ -83,16 +104,11 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     
     // cosine of angle between reflection dir and viewing dir
     float rdotv = max( dot(r,v), 0.0);
-    
+	
     // specular contribution
     vec3 specularCoeff = material.specular;
     float shininess = material.shininess;
     vec3 specular = specularCoeff * light.color * pow(rdotv, shininess);
- 
-	//color for debug mode
-	if(debug) {
-		return debugColor;
-	}
  
     // return sum of all contributions
     return ambient + diffuse + specular;
@@ -119,6 +135,5 @@ void main() {
                         light, material );
     
     // set fragment color
-    gl_FragColor = vec4(color, 1.0);
-    
+	gl_FragColor = vec4(color, 1.0);
 }

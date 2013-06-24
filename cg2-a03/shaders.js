@@ -17,8 +17,8 @@ define([
         "text!shaders/phong.vs",        "text!shaders/phong.fs"
        ], 
        (function( vertex_color_vs, vertex_color_fs,
-                  phong_vs,        phong_fs,
-				  planet_vs, planet_fs
+                  planet_vs, planet_fs,
+				  phong_vs,        phong_fs
                  ) {
 
     "use strict";
