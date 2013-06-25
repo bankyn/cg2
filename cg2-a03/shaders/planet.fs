@@ -87,13 +87,20 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
         if(!NightTime) {
 			return ambient;
 		}
-		else {
-			return texture2D(nightTexture,texCoords.st).rgb;
+		else if(!Daytime){
+			return ambient + texture2D(nightTexture,texCoords.st).r;
 		}
 	}
+	
     // diffuse contribution
     vec3 diffuseCoeff = material.diffuse;
-	if(Daytime && ndotl > 0.0) {
+	if(Daytime && NightTime) {
+		vec3 day = texture2D(daylightTexture, texCoords.st).rgb;
+		vec3 night = texture2D(nightTexture, texCoords.st).rgb;
+		float malpha = 1.0 - ndotl;
+		diffuseCoeff = vec3(ndotl*day[0],ndotl*day[1],ndotl*day[2])+vec3(malpha*night[0],malpha*night[1],malpha*night[2]);
+	}
+	else {
 		diffuseCoeff = texture2D(daylightTexture,texCoords.st).rgb;
 	}
     vec3 diffuse = diffuseCoeff * light.color * ndotl;

@@ -246,7 +246,6 @@ define(["util"],
             window.console.log("uniform sampler " + uniformName + " not used in shader.");
             return;
         };
-        
         // window.console.log("using texture unit "+textureUnit+" for sampler "+samplerName);
 
         // bind the texture unit to the sampler's location/name

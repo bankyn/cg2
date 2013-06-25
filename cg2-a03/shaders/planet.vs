@@ -23,12 +23,6 @@ uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat3 normalMatrix;
 
-//texture uniforms
-uniform bool Daytime;
-uniform bool NightTime;
-uniform sampler2D daylightTexture;
-uniform sampler2D nightTexture;
-
 // debugging uniforms
 uniform bool debug;
 uniform vec3 debugColor;
