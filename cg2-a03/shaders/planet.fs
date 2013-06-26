@@ -142,7 +142,7 @@ void main() {
     
 	// texture coordinates - create stripes (U2.3)
 	if(debug){
-		if(mod(texCoords.v, 0.05)>= 0.025)
+		if(mod(texCoords.s, 0.05)>= 0.025)
            color = color*0.7;
 	}
 	
