@@ -140,6 +140,12 @@ void main() {
     vec3 color = phong( ecPosition.xyz, normalEC, viewdirEC,
                         light, material );
     
+	// texture coordinates - create stripes (U2.3)
+	if(debug){
+		if(mod(texCoords.v, 0.05)>= 0.025)
+           color = color*0.7;
+	}
+	
     // set fragment color
 	gl_FragColor = vec4(color, 1.0);
 }
