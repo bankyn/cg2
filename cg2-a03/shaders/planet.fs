@@ -88,7 +88,7 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
 			return ambient;
 		}
 		else if(!Daytime){
-			return ambient + texture2D(nightTexture,texCoords.st).r;
+			return texture2D(nightTexture,texCoords.st).rgb;
 		}
 	}
 	
@@ -96,15 +96,19 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     vec3 diffuseCoeff = material.diffuse;
 	if(Daytime && NightTime) {
 		vec3 day = texture2D(daylightTexture, texCoords.st).rgb;
-		vec3 night = texture2D(nightTexture, texCoords.st).rgb;
-		float malpha = 1.0 - ndotl;
-		diffuseCoeff = vec3(ndotl*day[0],ndotl*day[1],ndotl*day[2])+vec3(malpha*night[0],malpha*night[1],malpha*night[2]);
+		ambient = texture2D(nightTexture, texCoords.st).rgb;
+		if(ndotl < 0.0) {
+			return ambient;
+		}
+		else {
+			diffuseCoeff = day;
+			ambient = pow((1.0 - ndotl),4.0)*ambient;
+		}
 	}
 	else if(Daytime){
 		diffuseCoeff = texture2D(daylightTexture,texCoords.st).rgb;
 	}
     vec3 diffuse = diffuseCoeff * light.color * ndotl;
-	
      // reflected light direction = perfect reflection direction
     vec3 r = reflect(l,n);
     
