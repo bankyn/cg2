@@ -37,8 +37,10 @@ uniform PhongMaterial material;
 //texture uniforms
 uniform bool Daytime;
 uniform bool NightTime;
+uniform bool redGreen;
 uniform sampler2D daylightTexture;
 uniform sampler2D nightTexture;
+uniform sampler2D waterEarthTexture;
 
 // debugging uniforms
 uniform bool debug;
@@ -126,6 +128,12 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     // return sum of all contributions
     return ambient + diffuse + specular;
     
+	if(redGreen){
+		vec3 rgCheckColor = texture2D(waterEarthTexture, texCoords.st).rgb;
+		// ~if water than green else red~
+		
+	}
+	
 }
 
 

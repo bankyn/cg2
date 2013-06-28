@@ -40,6 +40,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         // in 3.2 create textures from image files here...
         var daylightTexture = new texture.Texture2D(gl, "textures/earth_month04.jpg");
 		var nightTexture = new texture.Texture2D(gl, "textures/earth_at_night_2048.jpg");
+		var waterEarthTexture = new texture.Texture2D(gl, "textures/earth_bathymetry_4096.jpg");
         // in 3.2, bind textures to GPU programs in the following callback func
         var _scene = this;
         texture.onAllTexturesLoaded( (function() { 
@@ -47,6 +48,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
 			_scene.programs.planet.use();
 			_scene.programs.planet.setTexture("daylightTexture", 0, daylightTexture);
 			_scene.programs.planet.setTexture("nightTexture", 1, nightTexture);
+			_scene.programs.planet.setTexture("waterEarthTexture", 2, waterEarthTexture);
             _scene.draw();
         } ));
 
@@ -95,7 +97,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
                              "Show Ring": false,
 							 "Debug": false,
 							 "Daytime": true,
-							 "NightTime": true
+							 "NightTime": true,
+							 "Red-Green": false
                              };                       
     };
 
