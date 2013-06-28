@@ -26,6 +26,8 @@ uniform mat3 normalMatrix;
 // debugging uniforms
 uniform bool debug;
 uniform vec3 debugColor;
+// red color for water (3.4)
+uniform vec3 redColor;
 
 varying vec2 texCoords;
 varying vec4 ecPosition;

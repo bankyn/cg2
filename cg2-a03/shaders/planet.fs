@@ -45,6 +45,8 @@ uniform sampler2D waterEarthTexture;
 // debugging uniforms
 uniform bool debug;
 uniform vec3 debugColor;
+// red color for water (3.4)
+uniform vec3 redColor;
 
 // Light Source Data for a directional light (not point light)
 struct LightSource {
@@ -77,6 +79,18 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     // ambient part, this is a constant term shown on the
     // all sides of the object
     vec3 ambient = material.ambient * ambientLight;
+	
+	if(redGreen){
+		vec3 rgCheckColor = texture2D(waterEarthTexture, texCoords.st).rgb;
+		//~if water than green else red~
+		if (rgCheckColor == (0.0, 0.0, 0.0)){
+	// if (diffuseCoeff == (0.0, 0.0, 0.0)){
+
+			return debugColor;
+	// }
+		}
+		else return redColor;
+	}
 	
 	//debug color
 	if(debug && (ndotl >= 0.0  && ndotl <= 0.05)) {
@@ -127,12 +141,6 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
  
     // return sum of all contributions
     return ambient + diffuse + specular;
-    
-	if(redGreen){
-		vec3 rgCheckColor = texture2D(waterEarthTexture, texCoords.st).rgb;
-		// ~if water than green else red~
-		
-	}
 	
 }
 

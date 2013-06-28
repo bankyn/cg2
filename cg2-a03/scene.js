@@ -36,6 +36,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
 		this.programs.planet.use();
 		this.programs.planet.setUniform("ambientLight", "vec3", [0.4,0.4,0.4]);
 		this.programs.planet.setUniform("debugColor", "vec3", [0.0,1.0,0.0]);
+		this.programs.planet.setUniform("redColor", "vec3", [1.0,0.0,0.0]);
 		
         // in 3.2 create textures from image files here...
         var daylightTexture = new texture.Texture2D(gl, "textures/earth_month04.jpg");
@@ -125,6 +126,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
 		this.programs.planet.setUniform("debug", "bool", this.drawOptions["Debug"]);
 		this.programs.planet.setUniform("Daytime", "bool", this.drawOptions["Daytime"]);
 		this.programs.planet.setUniform("NightTime", "bool", this.drawOptions["NightTime"]);
+		this.programs.planet.setUniform("redGreen", "bool", this.drawOptions["Red-Green"]);
         
         // clear color and depth buffers
         gl.clearColor(0.0, 0.0, 0.0, 1.0); 
