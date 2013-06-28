@@ -80,21 +80,19 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     // all sides of the object
     vec3 ambient = material.ambient * ambientLight;
 	
-	if(redGreen){
-		vec3 rgCheckColor = texture2D(waterEarthTexture, texCoords.st).rgb;
-		//~if water than green else red~
-		if (rgCheckColor == (0.0, 0.0, 0.0)){
-	// if (diffuseCoeff == (0.0, 0.0, 0.0)){
-
-			return debugColor;
-	// }
-		}
-		else return redColor;
-	}
-	
 	//debug color
 	if(debug && (ndotl >= 0.0  && ndotl <= 0.05)) {
 		return debugColor;
+	}
+	
+	// check, if water/earth texture, set according red/green color
+	if(redGreen){
+		vec3 rgCheckColor = texture2D(waterEarthTexture, texCoords.st).rgb;
+		//~if water then green else red~
+		if (rgCheckColor == (0.0, 0.0, 0.0)){
+			return debugColor;
+		}
+		else return redColor;
 	}
 	
     // is the current fragment's normal pointing away from the light?
