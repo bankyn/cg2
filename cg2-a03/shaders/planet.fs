@@ -38,9 +38,12 @@ uniform PhongMaterial material;
 uniform bool Daytime;
 uniform bool NightTime;
 uniform bool redGreen;
+uniform bool glossMap;
+uniform bool clouds;
 uniform sampler2D daylightTexture;
 uniform sampler2D nightTexture;
 uniform sampler2D waterEarthTexture;
+uniform sampler2D cloudsTexture;
 
 // debugging uniforms
 uniform bool debug;
@@ -105,15 +108,24 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
 			return texture2D(nightTexture,texCoords.st).rgb;
 		}
 	}
+	//clouds
+	float cloudCoeff = 0.0;
+	vec3 cloudColor = texture2D(cloudsTexture, texCoords.st).rgb;
+	if(clouds){
+		cloudCoeff = cloudColor[1];
+	}
 	
     // diffuse contribution
     vec3 diffuseCoeff = material.diffuse;
 	if(NightTime) {
 		ambient = texture2D(nightTexture, texCoords.st).rgb;
-		ambient = pow((1.0 - ndotl),5.0)*ambient;
+		ambient = pow((1.0 - ndotl), 3.0)*ambient;
+		//darken colors, if clouds
+		ambient *= (1.0-cloudCoeff);
 	}
 	if(Daytime && NightTime) {
-		vec3 day = texture2D(daylightTexture, texCoords.st).rgb;
+		vec3 day = ((1.0-cloudCoeff) * texture2D(daylightTexture, texCoords.st).rgb + cloudColor*cloudCoeff)/2.0;
+		
 		if(ndotl < 0.0) {
 			return ambient;
 		}
@@ -131,11 +143,26 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
     
     // cosine of angle between reflection dir and viewing dir
     float rdotv = max( dot(r,v), 0.0);
+	vec3 specularCoeff =  material.specular;
+	float shininess = material.shininess;
 	
-    // specular contribution
-    vec3 specularCoeff = material.specular;
-    float shininess = material.shininess;
+
+    // gloss map
+	if(glossMap){
+		vec3 glossColor = texture2D(waterEarthTexture, texCoords.st).rgb;
+		specularCoeff = glossColor+0.2;
+		//if (glossColor != (0.0, 0.0, 0.0)){
+		//	specularCoeff =  material.specular*1.2 ;
+		shininess = material.shininess-glossColor[1]*40.0;	
+		//}
+    }else{
+		specularCoeff = material.specular;
+		shininess = material.shininess;
+	}
+	// specular contribution
     vec3 specular = specularCoeff * light.color * pow(rdotv, shininess);
+
+	
  
     // return sum of all contributions
     return ambient + diffuse + specular;

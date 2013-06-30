@@ -42,6 +42,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
         var daylightTexture = new texture.Texture2D(gl, "textures/earth_month04.jpg");
 		var nightTexture = new texture.Texture2D(gl, "textures/earth_at_night_2048.jpg");
 		var waterEarthTexture = new texture.Texture2D(gl, "textures/earth_bathymetry_4096.jpg");
+		var cloudsTexture = new texture.Texture2D(gl, "textures/earth_clouds_2048.jpg");
         // in 3.2, bind textures to GPU programs in the following callback func
         var _scene = this;
         texture.onAllTexturesLoaded( (function() { 
@@ -50,6 +51,7 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
 			_scene.programs.planet.setTexture("daylightTexture", 0, daylightTexture);
 			_scene.programs.planet.setTexture("nightTexture", 1, nightTexture);
 			_scene.programs.planet.setTexture("waterEarthTexture", 2, waterEarthTexture);
+			_scene.programs.planet.setTexture("cloudsTexture", 3, cloudsTexture);
             _scene.draw();
         } ));
 
@@ -99,7 +101,9 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
 							 "Debug": false,
 							 "Daytime": true,
 							 "NightTime": true,
-							 "Red-Green": false
+							 "Red-Green": false,
+							 "GlossMap": false,
+							 "Clouds": false
                              };                       
     };
 
@@ -127,6 +131,8 @@ define(["jquery", "gl-matrix", "util", "program", "shaders", "scene_node",
 		this.programs.planet.setUniform("Daytime", "bool", this.drawOptions["Daytime"]);
 		this.programs.planet.setUniform("NightTime", "bool", this.drawOptions["NightTime"]);
 		this.programs.planet.setUniform("redGreen", "bool", this.drawOptions["Red-Green"]);
+		this.programs.planet.setUniform("glossMap", "bool", this.drawOptions["GlossMap"]);
+		this.programs.planet.setUniform("clouds", "bool", this.drawOptions["Clouds"]);
         
         // clear color and depth buffers
         gl.clearColor(0.0, 0.0, 0.0, 1.0); 
