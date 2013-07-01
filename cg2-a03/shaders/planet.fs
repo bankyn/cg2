@@ -92,7 +92,7 @@ vec3 phong(vec3 pos, vec3 n, vec3 v, LightSource light, PhongMaterial material) 
 	if(redGreen){
 		vec3 rgCheckColor = texture2D(waterEarthTexture, texCoords.st).rgb;
 		//~if water then green else red~
-		if (rgCheckColor == (0.0, 0.0, 0.0)){
+		if (rgCheckColor == vec3(0.0, 0.0, 0.0)){
 			return debugColor;
 		}
 		else return redColor;
